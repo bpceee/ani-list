@@ -1,8 +1,11 @@
 "use client";
 import { AnimeCard } from "@/components/AnimeCard";
+import { useSearchParams, useRouter } from "next/navigation";
 import { useQuery } from "@apollo/client";
 import { Center, Container, Grid, Spinner, Text } from "@chakra-ui/react";
 import { graphql } from "../gql/gql";
+import { ButtonGroup, IconButton, Pagination } from "@chakra-ui/react";
+import { HiChevronLeft, HiChevronRight } from "react-icons/hi";
 
 const ITEMS_PER_PAGE = 12;
 const GET_ANIME_LIST = graphql(`
@@ -34,12 +37,18 @@ const GET_ANIME_LIST = graphql(`
 `);
 
 export default function Home() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const currentPage = Number(searchParams.get("page")) || 1;
   const { loading, error, data } = useQuery(GET_ANIME_LIST, {
     variables: {
-      page: 1,
+      page: currentPage,
       perPage: ITEMS_PER_PAGE,
     },
   });
+  const handlePageChange = (newPage: number) => {
+    router.push(`?page=${newPage}`);
+  };
 
   if (loading) {
     return (
@@ -60,6 +69,7 @@ export default function Home() {
   const items = (data?.Page?.media ?? []).filter(
     (item): item is NonNullable<typeof item> => !!item
   );
+  const totalItems = data?.Page?.pageInfo?.total ?? 0;
   return (
     <Container py={8}>
       <Grid
@@ -76,6 +86,36 @@ export default function Home() {
           <AnimeCard key={anime.id} anime={anime} />
         ))}
       </Grid>
+      <Center>
+        <Pagination.Root
+          count={totalItems}
+          pageSize={ITEMS_PER_PAGE}
+          page={currentPage}
+          onPageChange={(e) => handlePageChange(e.page)}
+        >
+          <ButtonGroup variant="ghost" size="sm">
+            <Pagination.PrevTrigger asChild>
+              <IconButton>
+                <HiChevronLeft />
+              </IconButton>
+            </Pagination.PrevTrigger>
+
+            <Pagination.Items
+              render={(page) => (
+                <IconButton variant={{ base: "ghost", _selected: "outline" }}>
+                  {page.value}
+                </IconButton>
+              )}
+            />
+
+            <Pagination.NextTrigger asChild>
+              <IconButton>
+                <HiChevronRight />
+              </IconButton>
+            </Pagination.NextTrigger>
+          </ButtonGroup>
+        </Pagination.Root>
+      </Center>
     </Container>
   );
 }
