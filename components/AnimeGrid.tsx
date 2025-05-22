@@ -58,6 +58,10 @@ export const AnimeGrid = () => {
   });
   const handlePageChange = (newPage: number) => {
     router.push(`?page=${newPage}`);
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
   };
 
   if (loading) {
