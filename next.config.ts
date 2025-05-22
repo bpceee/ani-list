@@ -5,6 +5,9 @@ const nextConfig: NextConfig = {
   experimental: {
     optimizePackageImports: ["@chakra-ui/react"],
   },
+  images: {
+    remotePatterns: [new URL("https://s4.anilist.co/**")],
+  },
 };
 
 export default nextConfig;

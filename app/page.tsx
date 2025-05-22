@@ -1,7 +1,7 @@
 "use client";
 import { AnimeCard } from "@/components/AnimeCard";
 import { useQuery } from "@apollo/client";
-import { Center, Grid, Spinner, Text } from "@chakra-ui/react";
+import { Center, Container, Grid, Spinner, Text } from "@chakra-ui/react";
 import { graphql } from "../gql/gql";
 
 const ITEMS_PER_PAGE = 12;
@@ -61,19 +61,21 @@ export default function Home() {
     (item): item is NonNullable<typeof item> => !!item
   );
   return (
-    <Grid
-      templateColumns={{
-        base: "1fr",
-        md: "repeat(2, 1fr)",
-        lg: "repeat(3, 1fr)",
-        xl: "repeat(4, 1fr)",
-      }}
-      gap={6}
-      mb={8}
-    >
-      {items.map((anime) => (
-        <AnimeCard key={anime.id} anime={anime} />
-      ))}
-    </Grid>
+    <Container py={8}>
+      <Grid
+        templateColumns={{
+          base: "1fr",
+          md: "repeat(2, 1fr)",
+          lg: "repeat(3, 1fr)",
+          xl: "repeat(4, 1fr)",
+        }}
+        gap={6}
+        mb={8}
+      >
+        {items.map((anime) => (
+          <AnimeCard key={anime.id} anime={anime} />
+        ))}
+      </Grid>
+    </Container>
   );
 }
