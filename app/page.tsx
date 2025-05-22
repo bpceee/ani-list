@@ -1,10 +1,37 @@
 "use client";
 import { AnimeCard } from "@/components/AnimeCard";
-import { GET_ANIME_LIST } from "@/graphql/queries";
 import { useQuery } from "@apollo/client";
 import { Center, Grid, Spinner, Text } from "@chakra-ui/react";
+import { graphql } from "../gql/gql";
 
 const ITEMS_PER_PAGE = 12;
+const GET_ANIME_LIST = graphql(`
+  query GetAnimeList($page: Int, $perPage: Int) {
+    Page(page: $page, perPage: $perPage) {
+      pageInfo {
+        total
+        currentPage
+        lastPage
+        hasNextPage
+        perPage
+      }
+      media(type: ANIME, sort: POPULARITY_DESC) {
+        id
+        title {
+          english
+          native
+        }
+        coverImage {
+          large
+        }
+        description
+        episodes
+        status
+        averageScore
+      }
+    }
+  }
+`);
 
 export default function Home() {
   const { loading, error, data } = useQuery(GET_ANIME_LIST, {
@@ -30,8 +57,9 @@ export default function Home() {
     );
   }
 
-  const { Page } = data;
-
+  const items = (data?.Page?.media ?? []).filter(
+    (item): item is NonNullable<typeof item> => !!item
+  );
   return (
     <Grid
       templateColumns={{
@@ -43,7 +71,7 @@ export default function Home() {
       gap={6}
       mb={8}
     >
-      {Page.media.map((anime: any) => (
+      {items.map((anime) => (
         <AnimeCard key={anime.id} anime={anime} />
       ))}
     </Grid>

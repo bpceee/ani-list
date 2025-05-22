@@ -3,6 +3,7 @@
 import { Box } from "@chakra-ui/react";
 
 type AnimeCardProps = {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   anime: any;
 };
 
