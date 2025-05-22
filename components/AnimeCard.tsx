@@ -16,7 +16,7 @@ type AnimeCardProps = {
   anime: Partial<Media>;
 };
 
-export function AnimeCard({ anime }: AnimeCardProps) {
+export const AnimeCard = ({ anime }: AnimeCardProps) => {
   return (
     <Box
       cursor="pointer"
@@ -49,4 +49,4 @@ export function AnimeCard({ anime }: AnimeCardProps) {
       </Stack>
     </Box>
   );
-}
+};
