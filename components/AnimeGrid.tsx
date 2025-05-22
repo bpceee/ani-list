@@ -2,9 +2,19 @@
 import { AnimeCard } from "@/components/AnimeCard";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useQuery } from "@apollo/client";
-import { Center, Grid, Spinner, Text } from "@chakra-ui/react";
+import {
+  Center,
+  Grid,
+  Text,
+  Skeleton,
+  SkeletonText,
+  Box,
+  AspectRatio,
+  Stack,
+} from "@chakra-ui/react";
 import { graphql } from "../gql/gql";
 import { ButtonGroup, IconButton, Pagination } from "@chakra-ui/react";
+
 import { HiChevronLeft, HiChevronRight } from "react-icons/hi";
 
 const ITEMS_PER_PAGE = 12;
@@ -52,9 +62,20 @@ export const AnimeGrid = () => {
 
   if (loading) {
     return (
-      <Center h="100vh">
-        <Spinner size="xl" />
-      </Center>
+      <Grid
+        templateColumns={{
+          base: "1fr",
+          md: "repeat(2, 1fr)",
+          lg: "repeat(3, 1fr)",
+          xl: "repeat(4, 1fr)",
+        }}
+        gap={6}
+        mb={8}
+      >
+        {Array.from({ length: ITEMS_PER_PAGE }).map((_, index) => (
+          <LoadingSkeleton key={index} />
+        ))}
+      </Grid>
     );
   }
 
@@ -119,3 +140,15 @@ export const AnimeGrid = () => {
     </>
   );
 };
+
+const LoadingSkeleton = () => (
+  <Box borderWidth="1px" borderRadius="lg" overflow="hidden">
+    <AspectRatio ratio={3 / 4}>
+      <Skeleton height="100%" width="100%" />
+    </AspectRatio>
+    <Stack p={4} align="start">
+      <SkeletonText noOfLines={1} width="80%" />
+      <Skeleton height="20px" width="60px" />
+    </Stack>
+  </Box>
+);
