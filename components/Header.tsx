@@ -1,7 +1,7 @@
 import { Box, Container, Flex, Text } from "@chakra-ui/react";
 import { UserAvatar } from "./UserAvatar";
 
-export function Header() {
+export const Header = () => {
   return (
     <Box as="header" bg="blue.500" color="white" py={4}>
       <Container>
@@ -14,4 +14,4 @@ export function Header() {
       </Container>
     </Box>
   );
-}
+};
