@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { ChakraProvider } from "@/providers/ChakraProvider";
 import { UserProvider } from "@/context/UserContext";
 import { AuthGuard } from "@/components/AuthGuard";
+import { Header } from "@/components/Header";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,6 +30,7 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <ChakraProvider>
           <UserProvider>
+            <Header />
             <AuthGuard>{children}</AuthGuard>
           </UserProvider>
         </ChakraProvider>
