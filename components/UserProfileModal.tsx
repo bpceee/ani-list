@@ -36,13 +36,14 @@ export const UserProfileModal = ({ dialog }: Props) => {
     <Dialog.RootProvider value={dialog}>
       <Portal>
         <Dialog.Backdrop />
-        <DialogContent>
-          <DialogHeader fontSize="lg" fontWeight="bold">
-            {isLoggingIn ? "Welcome!" : "Edit Profile"}
-          </DialogHeader>
-          <Dialog.Body pb="4">
-            {/* TODO: use fieldset */}
-            {/* {isLogin && (
+        <Dialog.Positioner>
+          <DialogContent>
+            <DialogHeader fontSize="lg" fontWeight="bold">
+              {isLoggingIn ? "Welcome!" : "Edit Profile"}
+            </DialogHeader>
+            <Dialog.Body pb="4">
+              {/* TODO: use fieldset */}
+              {/* {isLogin && (
               <Stack>
                 <Field.HelperText>
                   Please provide your details below to gain access.
@@ -50,40 +51,41 @@ export const UserProfileModal = ({ dialog }: Props) => {
               </Stack>
             )} */}
 
-            <Stack gap="4">
-              {/* TODO: Add required error after touched */}
-              <Field.Root>
-                <Field.Label>Username</Field.Label>
-                <Input
-                  value={username}
-                  required
-                  onChange={(e) => setUsername(e.target.value)}
-                  placeholder="Enter your username"
-                />
-              </Field.Root>
+              <Stack gap="4">
+                {/* TODO: Add required error after touched */}
+                <Field.Root>
+                  <Field.Label>Username</Field.Label>
+                  <Input
+                    value={username}
+                    required
+                    onChange={(e) => setUsername(e.target.value)}
+                    placeholder="Enter your username"
+                  />
+                </Field.Root>
 
-              <Field.Root>
-                <Field.Label>Job Title</Field.Label>
-                <Input
-                  value={jobTitle}
-                  required
-                  onChange={(e) => setJobTitle(e.target.value)}
-                  placeholder="Enter your job title"
-                />
-              </Field.Root>
-            </Stack>
-          </Dialog.Body>
-          <Dialog.Footer>
-            {!isLoggingIn && (
-              <Dialog.ActionTrigger asChild>
-                <Button variant="outline">Cancel</Button>
-              </Dialog.ActionTrigger>
-            )}
-            <Button onClick={handleSubmit} disabled={!username || !jobTitle}>
-              Save
-            </Button>
-          </Dialog.Footer>
-        </DialogContent>
+                <Field.Root>
+                  <Field.Label>Job Title</Field.Label>
+                  <Input
+                    value={jobTitle}
+                    required
+                    onChange={(e) => setJobTitle(e.target.value)}
+                    placeholder="Enter your job title"
+                  />
+                </Field.Root>
+              </Stack>
+            </Dialog.Body>
+            <Dialog.Footer>
+              {!isLoggingIn && (
+                <Dialog.ActionTrigger asChild>
+                  <Button variant="outline">Cancel</Button>
+                </Dialog.ActionTrigger>
+              )}
+              <Button onClick={handleSubmit} disabled={!username || !jobTitle}>
+                Save
+              </Button>
+            </Dialog.Footer>
+          </DialogContent>
+        </Dialog.Positioner>
       </Portal>
     </Dialog.RootProvider>
   );
