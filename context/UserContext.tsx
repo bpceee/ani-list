@@ -17,6 +17,7 @@ interface UserContext {
   userInfo: UserInfo | null;
   setUserInfo: (info: UserInfo) => void;
   isAuthenticated: boolean;
+  logout: () => void;
 }
 
 const UserContext = createContext<UserContext | undefined>(undefined);
@@ -36,12 +37,18 @@ export function UserProvider({ children }: { children: ReactNode }) {
     localStorage.setItem("userInfo", JSON.stringify(info));
   };
 
+  const handleLogout = () => {
+    setUserInfo(null);
+    localStorage.removeItem("userInfo");
+  };
+
   return (
     <UserContext.Provider
       value={{
         userInfo,
         setUserInfo: handleSetUserInfo,
         isAuthenticated: !!userInfo,
+        logout: handleLogout,
       }}
     >
       {children}
