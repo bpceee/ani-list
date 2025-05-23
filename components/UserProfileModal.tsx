@@ -9,11 +9,22 @@ import {
   Field,
   Input,
   Stack,
+  Text,
   UseDialogReturn,
+  Fieldset,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { useUser } from "@/context/UserContext";
 
+interface Fields {
+  username: boolean;
+  jobTitle: boolean;
+}
+
+interface FormErrors {
+  username?: string;
+  jobTitle?: string;
+}
 interface Props {
   dialog: UseDialogReturn;
 }
@@ -22,6 +33,40 @@ export const UserProfileModal = ({ dialog }: Props) => {
   const { userInfo, setUserInfo } = useUser();
   const [username, setUsername] = useState(userInfo?.username || "");
   const [jobTitle, setJobTitle] = useState(userInfo?.jobTitle || "");
+  const [errors, setErrors] = useState<FormErrors>({});
+  const [touched, setTouched] = useState<Fields>({
+    username: false,
+    jobTitle: false,
+  });
+
+  const validateField = (name: string, value: string) => {
+    if (!value.trim()) {
+      return `${name} is required`;
+    }
+    if (value.length < 3) {
+      return `${name} must be at least 3 characters`;
+    }
+    return undefined;
+  };
+
+  const handleBlur = (field: keyof Fields) => {
+    setTouched((prev) => ({ ...prev, [field]: true }));
+    const value = field === "username" ? username : jobTitle;
+    const error = validateField(field, value);
+    setErrors((prev) => ({ ...prev, [field]: error }));
+  };
+
+  const handleUserNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUsername(e.target.value);
+    const error = validateField("username", e.target.value);
+    setErrors((prev) => ({ ...prev, username: error }));
+  };
+
+  const handleJobTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setJobTitle(e.target.value);
+    const error = validateField("jobTitle", e.target.value);
+    setErrors((prev) => ({ ...prev, jobTitle: error }));
+  };
 
   const isLoggingIn = !userInfo;
 
@@ -42,37 +87,48 @@ export const UserProfileModal = ({ dialog }: Props) => {
               {isLoggingIn ? "Welcome!" : "Edit Profile"}
             </DialogHeader>
             <Dialog.Body pb="4">
-              {/* TODO: use fieldset */}
-              {/* {isLogin && (
-              <Stack>
-                <Field.HelperText>
-                  Please provide your details below to gain access.
-                </Field.HelperText>
-              </Stack>
-            )} */}
+              <Fieldset.Root>
+                {isLoggingIn && (
+                  <Fieldset.HelperText>
+                    Please provide your details below to gain access.
+                  </Fieldset.HelperText>
+                )}
+                <Fieldset.Content>
+                  <Stack gap="4">
+                    <Field.Root invalid={!!errors.username && touched.username}>
+                      <Field.Label>Username</Field.Label>
+                      <Input
+                        value={username}
+                        required
+                        onChange={handleUserNameChange}
+                        onBlur={() => handleBlur("username")}
+                        placeholder="Enter your username"
+                      />
+                      {touched.username && errors.username && (
+                        <Text color="red.500" fontSize="sm" mt={1}>
+                          {errors.username}
+                        </Text>
+                      )}
+                    </Field.Root>
 
-              <Stack gap="4">
-                {/* TODO: Add required error after touched */}
-                <Field.Root>
-                  <Field.Label>Username</Field.Label>
-                  <Input
-                    value={username}
-                    required
-                    onChange={(e) => setUsername(e.target.value)}
-                    placeholder="Enter your username"
-                  />
-                </Field.Root>
-
-                <Field.Root>
-                  <Field.Label>Job Title</Field.Label>
-                  <Input
-                    value={jobTitle}
-                    required
-                    onChange={(e) => setJobTitle(e.target.value)}
-                    placeholder="Enter your job title"
-                  />
-                </Field.Root>
-              </Stack>
+                    <Field.Root invalid={!!errors.jobTitle && touched.jobTitle}>
+                      <Field.Label>Job Title</Field.Label>
+                      <Input
+                        value={jobTitle}
+                        required
+                        onChange={handleJobTitleChange}
+                        onBlur={() => handleBlur("jobTitle")}
+                        placeholder="Enter your job title"
+                      />
+                      {touched.jobTitle && errors.jobTitle && (
+                        <Text color="red.500" fontSize="sm" mt={1}>
+                          {errors.jobTitle}
+                        </Text>
+                      )}
+                    </Field.Root>
+                  </Stack>
+                </Fieldset.Content>
+              </Fieldset.Root>
             </Dialog.Body>
             <Dialog.Footer>
               {!isLoggingIn && (
@@ -80,7 +136,10 @@ export const UserProfileModal = ({ dialog }: Props) => {
                   <Button variant="outline">Cancel</Button>
                 </Dialog.ActionTrigger>
               )}
-              <Button onClick={handleSubmit} disabled={!username || !jobTitle}>
+              <Button
+                onClick={handleSubmit}
+                disabled={!!errors.username || !!errors.jobTitle}
+              >
                 Save
               </Button>
             </Dialog.Footer>
