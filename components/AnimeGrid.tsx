@@ -11,6 +11,7 @@ import {
   Box,
   AspectRatio,
   Stack,
+  useBreakpointValue,
 } from "@chakra-ui/react";
 import { graphql } from "../gql/gql";
 import { ButtonGroup, IconButton, Pagination } from "@chakra-ui/react";
@@ -47,6 +48,7 @@ const GET_ANIME_LIST = graphql(`
 `);
 
 export const AnimeGrid = () => {
+  const isSmallScreen = useBreakpointValue({ base: true, md: false });
   const router = useRouter();
   const searchParams = useSearchParams();
   const currentPage = Number(searchParams.get("page")) || 1;
@@ -125,13 +127,17 @@ export const AnimeGrid = () => {
               </IconButton>
             </Pagination.PrevTrigger>
 
-            <Pagination.Items
-              render={(page) => (
-                <IconButton variant={{ base: "ghost", _selected: "outline" }}>
-                  {page.value}
-                </IconButton>
-              )}
-            />
+            {isSmallScreen ? (
+              <Pagination.PageText />
+            ) : (
+              <Pagination.Items
+                render={(page) => (
+                  <IconButton variant={{ base: "ghost", _selected: "outline" }}>
+                    {page.value}
+                  </IconButton>
+                )}
+              />
+            )}
 
             <Pagination.NextTrigger asChild>
               <IconButton>
