@@ -23,6 +23,7 @@ export const AnimeCard = ({ anime }: AnimeCardProps) => {
   return (
     <>
       <Box
+        as="button"
         cursor="pointer"
         borderWidth="1px"
         borderRadius="lg"
