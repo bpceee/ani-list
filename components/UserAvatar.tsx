@@ -18,7 +18,7 @@ export const UserAvatar = () => {
     <>
       <Menu.Root>
         <Menu.Trigger cursor="pointer">
-          <Avatar.Root>
+          <Avatar.Root size="sm">
             <Avatar.Fallback name={userInfo?.username} />
           </Avatar.Root>
         </Menu.Trigger>

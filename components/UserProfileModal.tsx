@@ -39,6 +39,8 @@ export const UserProfileModal = ({ dialog }: Props) => {
     jobTitle: false,
   });
 
+  // Should consider using a library like React Hook Form or Formik for better form handling
+  // and validation, especially for larger forms.
   const validateField = (name: string, value: string) => {
     if (!value.trim()) {
       return `${name} is required`;

@@ -12,6 +12,7 @@ export const Header = () => {
               Anime List
             </Text>
           </Link>
+          {/* If change avatar size, make sure header heigh won't change after client side render to prevent jumping */}
           <UserAvatar />
         </Flex>
       </Container>

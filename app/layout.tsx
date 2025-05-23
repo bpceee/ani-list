@@ -23,8 +23,8 @@ export default function RootLayout({
           <ApolloProvider>
             <UserProvider>
               <Header />
-              {/* 129px is the height of the header and footer combined  */}
-              <main style={{ minHeight: "calc(100vh - 129px)" }}>
+              {/* 125px is the height of the header and footer combined  */}
+              <main style={{ minHeight: "calc(100vh - 125px)" }}>
                 <AuthGuard>{children}</AuthGuard>
               </main>
               <Footer />
