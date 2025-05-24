@@ -1,5 +1,5 @@
 "use client";
-import { AnimeCard } from "@/components/AnimeCard";
+import { AnimeCard } from "./AnimeCard";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useQuery } from "@apollo/client";
 import {
@@ -52,6 +52,8 @@ export const AnimeGrid = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const currentPage = Number(searchParams.get("page")) || 1;
+  // Consider using server-side rendering (SSR), since this is a public data fetch that's the same for all users.
+  // However, SSR would require a different setup for the Apollo Client.
   const { loading, error, data } = useQuery(GET_ANIME_LIST, {
     variables: {
       page: currentPage,

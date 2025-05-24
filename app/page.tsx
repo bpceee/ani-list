@@ -1,4 +1,4 @@
-import { AnimeGrid } from "@/components/AnimeGrid";
+import { AnimeGrid } from "./AnimeGrid";
 import { Container } from "@chakra-ui/react";
 
 export default function Home() {
